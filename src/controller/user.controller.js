@@ -1,10 +1,7 @@
-
-
 import { User } from "../models/user.model.js";
 
-
 // register User logic
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   try {
     const { username, email, password, phone } = req.body;
     if (!username || !email || !password || !phone) {
@@ -17,14 +14,18 @@ const registerUser = async (req, res) => {
     }
 
     const user = await User.create({ username, email, password, phone });
-    res.status(201).json({ message: "Registration Successful", token: await user.generateToken(), userId: user._id.toString() });
+    res.status(201).json({
+      message: "Registration Successful",
+      token: await user.generateToken(),
+      userId: user._id.toString(),
+    });
   } catch (error) {
     // res.status(500).json({ message: error.message });
     next(error);
   }
-}
+};
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const userExist = await User.findOne({ email });
@@ -35,14 +36,18 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    res.status(200).json({ message: "Login successful", token: await userExist.generateToken(), userId: userExist._id.toString() });
+    res.status(200).json({
+      message: "Login successful",
+      token: await userExist.generateToken(),
+      userId: userExist._id.toString(),
+    });
   } catch (error) {
-    next(error)
+    next(error);
     // console.log(error);
   }
-}
+};
 
-const user = async (req, res) => {
+const user = async (req, res, next) => {
   try {
     // const userData = await User.find({});
     const userData = req.user;
@@ -50,8 +55,8 @@ const user = async (req, res) => {
     return res.status(200).json({ userData });
   } catch (error) {
     // console.log(` error from user route ${error}`);
-    next(error)
+    next(error);
   }
 };
 
-export { registerUser, loginUser, user }
+export { registerUser, loginUser, user };

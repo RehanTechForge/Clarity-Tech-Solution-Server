@@ -1,21 +1,20 @@
 import { Contact } from "../models/contact.model.js";
 
-const contactForm = async (req, res) => {
+const contactForm = async (req, res, next) => {
   try {
     const { username, email, message } = req.body;
 
     await Contact.create({
       username,
       email,
-      message
+      message,
     });
 
     return res.status(201).json({
-      message: "Form submitted successfully"
+      message: "Form submitted successfully",
     });
-
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 export { contactForm };

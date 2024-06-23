@@ -1,6 +1,6 @@
 import { Service } from "../models/service.model.js";
 
-const service = async (req, res) => {
+const service = async (req, res, next) => {
   try {
     const response = await Service.find();
     if (!response) {
@@ -10,7 +10,7 @@ const service = async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     // console.log(`Service ${error}`);
-    next(error)
+    next(error);
   }
-}
-export { service }
+};
+export { service };
